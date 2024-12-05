@@ -23,6 +23,7 @@ downloadData(){
   do
     check_city=$(./jq.exe ".[$i].stacja" temp_stations.json | tr -d '"')
     check_city=$(echo "$check_city" | sed 'y/ąćęłńóśźżĄĆĘŁŃÓŚŹŻ /acelnoszzACELNOSZZ_/')
+    check_city=$(echo "$check_city" | tr '[:upper:]' '[:lower:]')
     checkEntries "$check_city" "0" > /dev/null 2>&1
   done
 }
@@ -115,6 +116,7 @@ main(){
   
   check_city=$1
   check_city=$(echo "$check_city" | sed 'y/ąćęłńóśźżĄĆĘŁŃÓŚŹŻ /acelnoszzACELNOSZZ_/')
+  check_city=$(echo "$check_city" | tr '[:upper:]' '[:lower:]')
   city_location=$(checkEntries "$check_city" "1")
   city_lat=$(echo "$city_location" | cut -d ' ' -f 1 | xargs | awk '{print $1}')
   city_lon=$(echo "$city_location" | cut -d ' ' -f 2 | xargs | awk '{print $1}')
@@ -122,8 +124,6 @@ main(){
   printUI $(findNearest "$city_lat" "$city_lon")
 
 }
-
-
 
 
 help(){
